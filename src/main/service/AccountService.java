@@ -1,12 +1,12 @@
 package main.service;
 
 import main.domain.Customer;
+import main.exception.InsufficientFundsException;
 
 public class AccountService {
-    public int withdraw(Customer customer, double amount) {
-        if (customer.getAccount().getBalance() < amount) return -1;
+    public void withdraw(Customer customer, double amount) throws InsufficientFundsException {
+        if (customer.getAccount().getBalance() < amount) throw new InsufficientFundsException("Insufficient funds");
         customer.getAccount().setBalance(customer.getAccount().getBalance() - amount);
-        return 0;
     }
 
     public boolean hasMoreThanFiveYears(Customer customer) {
