@@ -4,8 +4,8 @@ import main.domain.Customer;
 
 public class AccountService {
     public int withdraw(Customer customer, double amount) {
-        if (customer.getAccountBalance() < amount) return -1;
-        customer.setAccountBalance(customer.getAccountBalance() - amount);
+        if (customer.getAccount().getBalance() < amount) return -1;
+        customer.getAccount().setBalance(customer.getAccount().getBalance() - amount);
         return 0;
     }
 
