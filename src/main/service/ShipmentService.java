@@ -70,9 +70,9 @@ public class ShipmentService {
         shipment.setTotal(total);
         shipment.setStatus("READY");
 
-        String output = (total > 2000) ?
-                "PRIORITY | " + shipment.getReference() + " | " + String.format("%.2f", total) + " | " + notificationService.confirmationFor(shipment) :
-                "REGULAR | " + shipment.getReference() + " | " + String.format("%.2f", total) + " | " + notificationService.confirmationFor(shipment);
+        String output = (total > 2000)
+                ? "PRIORITY | " + shipment.getReference() + " | " + String.format("%.2f", total) + " | " + notificationService.confirmationFor(shipment)
+                : "REGULAR | " + shipment.getReference() + " | " + String.format("%.2f", total) + " | " + notificationService.confirmationFor(shipment);
 
         repository.save(shipment);
         return output;
