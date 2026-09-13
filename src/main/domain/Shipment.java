@@ -1,5 +1,9 @@
 package main.domain;
 
+import main.exception.CargoException;
+import main.exception.CustomerException;
+import main.service.PermissionService;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,50 @@ public class Shipment {
         this.destination = destination;
         this.ship = ship;
         this.departureDate = departureDate;
+    }
+
+    public double getTotalWeight() {
+        double totalWeight = 0;
+        for (Cargo item : getCargo()) {
+            totalWeight += item.getWeight();
+        }
+        return totalWeight;
+    }
+
+    public boolean hasHazardousCargo() {
+        for (Cargo item : getCargo()) {
+            if (item.isHazardous()) { return true; }
+        }
+        return false;
+    }
+
+    public double getTotalValue() {
+        double totalValue = 0;
+        for (Cargo item : getCargo()) {
+            totalValue += item.getDeclaredValue();
+        }
+        return totalValue;
+    }
+
+    public void validate() throws Exception {
+        validateCustomer();
+        validateCargo();
+    }
+
+    private void validateCustomer() throws CustomerException {
+        if (!getCustomer().isActive()) { throw new CustomerException("Customer is inactive"); }
+        if (getCustomer().getAccount().isSuspended()) { throw new CustomerException("Customer is suspended"); }
+    }
+
+    private void validateCargo() throws CargoException {
+        if (getCargo().isEmpty()) {
+            throw new CargoException("Cargo is empty");
+        }
+
+        if (getTotalWeight() > getShip().getCapacity())
+            throw new CargoException("Cargo over capacity");
+        if (hasHazardousCargo() && !new PermissionService().canCarryHazardous(getShip()))
+            throw new CargoException("Shipment cannot handle hazardous cargo");
     }
 
     public void addCargo(Cargo item) { cargo.add(item); }

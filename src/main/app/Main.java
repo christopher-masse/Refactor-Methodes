@@ -26,7 +26,7 @@ public class Main {
         ShipmentService service = new ShipmentService();
 
         try {
-            service.validate(shipment);
+            shipment.validate();
         } catch (Exception ex) {
             System.out.println("Invalid shipment: " + ex.getMessage());
         }

@@ -22,11 +22,9 @@ public class PricingService {
     public double increaseByPercent(double price, double percent) { return price + price * percent; }
 
     public double calculatePrice(Shipment shipment) {
-        ShipmentService shipmentService = new ShipmentService();
-
-        double result = shipmentService.getTotalWeight(shipment) * PRICE_PER_POUND;
-        if (shipmentService.getTotalValue(shipment) > HIGH_VALUE_LIMIT) result += shipmentService.getTotalValue(shipment) * HIGH_VALUE_RATE;
-        if (shipmentService.hasHazardousCargo(shipment)) result = increaseByPercent(result, HAZARDOUS_RATE);
+        double result = shipment.getTotalWeight() * PRICE_PER_POUND;
+        if (shipment.getTotalValue() > HIGH_VALUE_LIMIT) result += shipment.getTotalValue() * HIGH_VALUE_RATE;
+        if (shipment.hasHazardousCargo()) result = increaseByPercent(result, HAZARDOUS_RATE);
         if (shipment.getOrigin().getSecurityLevel().isHigherThan(SecurityLevel.HIGH)
                 || shipment.getDestination().getSecurityLevel().isHigherThan(SecurityLevel.HIGH)) result += SECURITY_RATE;
         if (!shipment.getOrigin().getSector().equals(shipment.getDestination().getSector())) result += SECTOR_RATE;
