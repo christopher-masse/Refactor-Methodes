@@ -4,16 +4,16 @@ import main.domain.Customer;
 import main.exception.InsufficientFundsException;
 
 public class AccountService {
+    final int REWARD_POINTS_HIGH = 500;
+    final int REWARD_POINTS_LOW = 100;
+    final int LOYALTY_YEARS = 5;
+
     public void withdraw(Customer customer, double amount) throws InsufficientFundsException {
         if (customer.getAccount().getBalance() < amount) throw new InsufficientFundsException("Insufficient funds");
         customer.getAccount().setBalance(customer.getAccount().getBalance() - amount);
     }
 
-    public boolean hasMoreThanFiveYears(Customer customer) {
-        return customer.getLoyaltyYears() > 5;
-    }
-
     public int getRewardPoints(Customer customer) {
-        return hasMoreThanFiveYears(customer) ? 500 : 100;
+        return customer.getLoyaltyYears() > LOYALTY_YEARS ? REWARD_POINTS_HIGH : REWARD_POINTS_LOW;
     }
 }
