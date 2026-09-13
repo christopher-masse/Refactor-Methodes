@@ -16,4 +16,12 @@ public enum SecurityLevel {
     public int getLevel() {
         return level;
     }
+
+    public boolean isHigherThan(SecurityLevel other) {
+        return this.compareTo(other) > 0;
+    }
+
+    public boolean isLowerThan(SecurityLevel other) {
+        return this.compareTo(other) < 0;
+    }
 }
