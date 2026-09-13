@@ -43,8 +43,7 @@ public class PricingService {
     }
 
     public String priceCategory(double price) {
-        double temporaryPrice = price;
-        return temporaryPrice > 1000 ? "HIGH" : "STANDARD";
+        return price > 1000 ? "HIGH" : "STANDARD";
     }
 
     public double calculateRouteSurcharge(Planet origin, Planet destination) {
