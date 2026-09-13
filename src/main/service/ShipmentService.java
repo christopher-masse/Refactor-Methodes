@@ -41,10 +41,14 @@ public class ShipmentService {
     }
 
     private void validateCargo(Shipment shipment) throws CargoException {
-        if (shipment.getCargo().isEmpty()) { throw new CargoException("Cargo is empty"); }
+        if (shipment.getCargo().isEmpty()) {
+            throw new CargoException("Cargo is empty");
+        }
 
-        if (getTotalWeight(shipment) > shipment.getShip().getCapacity()) throw new CargoException("Cargo over capacity");
-        if (hasHazardousCargo(shipment) && !new PermissionService().canCarryHazardous(shipment.getShip())) throw new CargoException("Shipment cannot handle hazardous cargo");
+        if (getTotalWeight(shipment) > shipment.getShip().getCapacity())
+            throw new CargoException("Cargo over capacity");
+        if (hasHazardousCargo(shipment) && !new PermissionService().canCarryHazardous(shipment.getShip()))
+            throw new CargoException("Shipment cannot handle hazardous cargo");
     }
 
     public String calculatePrintSaveAndNotify(Shipment shipment) {
