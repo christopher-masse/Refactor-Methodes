@@ -1,23 +1,36 @@
 package main.service;
 
 public class ScheduleService {
+    private final int MONDAY = 1;
+    private final int TUESDAY = 1 << 1;
+    private final int WEDNESDAY = 1 << 2;
+    private final int THURSDAY = 1 << 3;
+    private final int FRIDAY = 1 << 4;
+    private final int SATURDAY = 1 << 5;
+    private final int SUNDAY = 1 << 6;
+
     private final int[] departuresByDay = {4, 7, 3, 8, 12, 6, 2};
 
     public int createMask(boolean monday, boolean tuesday, boolean wednesday,
                           boolean thursday, boolean friday, boolean saturday, boolean sunday) {
+        boolean[] days = {
+                monday, tuesday, wednesday, thursday,
+                friday, saturday, sunday
+        };
+
         int mask = 0;
-        if (monday) mask += 1;
-        if (tuesday) mask += 2;
-        if (wednesday) mask += 4;
-        if (thursday) mask += 8;
-        if (friday) mask += 16;
-        if (saturday) mask += 32;
-        if (sunday) mask += 64;
+
+        for (int i = 0; i < days.length; i++) {
+            if (days[i]) {
+                mask |= 1 << i;
+            }
+        }
+
         return mask;
     }
 
     public boolean runsOnFriday(int mask) {
-        return (mask & 16) != 0;
+        return (mask & FRIDAY) != 0;
     }
 
     public int getDepartures(int day) {
