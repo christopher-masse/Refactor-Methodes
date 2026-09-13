@@ -6,26 +6,12 @@ import main.exception.CargoException;
 import main.exception.CustomerException;
 
 public class ShipmentService {
-    private final PricingService pricingService;
-    private final PermissionService permissionService;
-    private final ManifestRepository repository;
-    private final NotificationService notificationService;
-
-    public ShipmentService(PricingService pricingService, PermissionService permissionService,
-                           ManifestRepository repository, NotificationService notificationService) {
-        this.pricingService = pricingService;
-        this.permissionService = permissionService;
-        this.repository = repository;
-        this.notificationService = notificationService;
-    }
 
     public double getTotalWeight(Shipment shipment) {
         double totalWeight = 0;
-
         for (Cargo item : shipment.getCargo()) {
             totalWeight += item.getWeight();
         }
-
         return totalWeight;
     }
 
@@ -34,6 +20,14 @@ public class ShipmentService {
             if (item.isHazardous()) { return true; }
         }
         return false;
+    }
+
+    public double getTotalValue(Shipment shipment) {
+        double totalValue = 0;
+        for (Cargo item : shipment.getCargo()) {
+            totalValue += item.getDeclaredValue();
+        }
+        return totalValue;
     }
 
     public void validate(Shipment shipment) throws Exception {
@@ -50,7 +44,7 @@ public class ShipmentService {
         if (shipment.getCargo().isEmpty()) { throw new CargoException("Cargo is empty"); }
 
         if (getTotalWeight(shipment) > shipment.getShip().getCapacity()) throw new CargoException("Cargo over capacity");
-        if (hasHazardousCargo(shipment) && !permissionService.canCarryHazardous(shipment.getShip())) throw new CargoException("Shipment cannot handle hazardous cargo");
+        if (hasHazardousCargo(shipment) && !new PermissionService().canCarryHazardous(shipment.getShip())) throw new CargoException("Shipment cannot handle hazardous cargo");
     }
 
     public String validateCalculatePrintSaveAndNotify(Shipment shipment) {
@@ -59,27 +53,18 @@ public class ShipmentService {
         } catch (Exception ex) {
             return ex.getMessage();
         }
-        
-        double totalWeight = 0;
-        double totalValue = 0;
-        boolean hazardous = false;
-        for (Cargo item : shipment.getCargo()) {
-            totalWeight += item.getWeight();
-            totalValue += item.getDeclaredValue();
-            if (item.isHazardous()) hazardous = true;
-        }
 
-        double total = pricingService.calculatePrice(Shipment shipment);
-        total += pricingService.calculateInsurance(totalValue, hazardous, shipment.getCustomer());
+        double total = new PricingService().calculatePrice(shipment);
+        total += new PricingService().calculateInsurance(getTotalValue(shipment), hasHazardousCargo(shipment), shipment.getCustomer());
 
         shipment.setTotal(total);
         shipment.setStatus("READY");
 
         String output = (total > 2000)
-                ? "PRIORITY | " + shipment.getReference() + " | " + String.format("%.2f", total) + " | " + notificationService.confirmationFor(shipment)
-                : "REGULAR | " + shipment.getReference() + " | " + String.format("%.2f", total) + " | " + notificationService.confirmationFor(shipment);
+                ? "PRIORITY | " + shipment.getReference() + " | " + String.format("%.2f", total) + " | " + new NotificationService().confirmationFor(shipment)
+                : "REGULAR | " + shipment.getReference() + " | " + String.format("%.2f", total) + " | " + new NotificationService().confirmationFor(shipment);
 
-        repository.save(shipment);
+        new ManifestRepository().save(shipment);
         return output;
 
     }

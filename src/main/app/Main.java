@@ -23,8 +23,7 @@ public class Main {
         shipment.addCargo(new Cargo("Medical supplies", 500, 18000, false));
         shipment.addCargo(new Cargo("Volatile fuel cells", 100, 9000, true));
 
-        ShipmentService service = new ShipmentService(new PricingService(), new PermissionService(),
-                new ManifestRepository(), new NotificationService());
+        ShipmentService service = new ShipmentService();
         
         System.out.println(service.validateCalculatePrintSaveAndNotify(shipment));
     }

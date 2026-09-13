@@ -2,26 +2,36 @@ package main.service;
 
 import main.domain.Customer;
 import main.domain.Planet;
+import main.domain.Shipment;
 import main.enums.Sector;
 import main.enums.SecurityLevel;
 
 import java.time.LocalDate;
 
 public class PricingService {
+    private final double PRICE_PER_POUND = 2.25;
+    private final int SECURITY_RATE = 125;
+    private final double HIGH_VALUE_LIMIT = 10000;
+    private final double HIGH_VALUE_RATE = 0.015;
+    private final int SECTOR_RATE = 80;
+    private final int HOLIDAYS_RATE = 45;
+    private final int LOYALTY_DISCOUNT = 5;
+    private final double LOYALTY_DISCOUNT_RATE = 0.9;
+    private final double HAZARDOUS_RATE = 0.2;
+
     public double increaseByPercent(double price, double percent) { return price + price * percent; }
 
-    public double calculatePrice(double weight, double declaredValue, boolean hazardous,
-                                 String originName, Sector originSector, SecurityLevel originSecurity,
-                                 String destinationName, Sector destinationSector, SecurityLevel destinationSecurity,
-                                 int loyaltyYears, boolean active, boolean suspended,
-                                 LocalDate departureDate) {
-        double result = weight * 2.25;
-        if (declaredValue > 10000) result += declaredValue * 0.015;
-        if (hazardous) result = increaseByPercent(result, 0.2);
-        if (originSecurity.isHigherThan(SecurityLevel.HIGH) || destinationSecurity.isHigherThan(SecurityLevel.HIGH)) result += 125;
-        if (!originSector.equals(destinationSector)) result += 80;
-        if (departureDate.getMonthValue() == 12 || departureDate.getMonthValue() <= 2) result += 45;
-        if (loyaltyYears >= 5 && active && !suspended) result *= 0.90;
+    public double calculatePrice(Shipment shipment) {
+        ShipmentService shipmentService = new ShipmentService();
+
+        double result = shipmentService.getTotalWeight(shipment) * PRICE_PER_POUND;
+        if (shipmentService.getTotalValue(shipment) > HIGH_VALUE_LIMIT) result += shipmentService.getTotalValue(shipment) * HIGH_VALUE_RATE;
+        if (shipmentService.hasHazardousCargo(shipment)) result = increaseByPercent(result, HAZARDOUS_RATE);
+        if (shipment.getOrigin().getSecurityLevel().isHigherThan(SecurityLevel.HIGH)
+                || shipment.getDestination().getSecurityLevel().isHigherThan(SecurityLevel.HIGH)) result += SECURITY_RATE;
+        if (!shipment.getOrigin().getSector().equals(shipment.getDestination().getSector())) result += SECTOR_RATE;
+        if (shipment.getDepartureDate().getMonthValue() == 12 || shipment.getDepartureDate().getMonthValue() <= 2) result += HOLIDAYS_RATE;
+        if (shipment.getCustomer().getLoyaltyYears() >= LOYALTY_DISCOUNT) result *= LOYALTY_DISCOUNT_RATE;
         return result;
     }
 
