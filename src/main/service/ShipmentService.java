@@ -19,6 +19,23 @@ public class ShipmentService {
         this.notificationService = notificationService;
     }
 
+    public double getTotalWeight(Shipment shipment) {
+        double totalWeight = 0;
+
+        for (Cargo item : shipment.getCargo()) {
+            totalWeight += item.getWeight();
+        }
+
+        return totalWeight;
+    }
+
+    public boolean hasHazardousCargo(Shipment shipment) {
+        for (Cargo item : shipment.getCargo()) {
+            if (item.isHazardous()) { return true; }
+        }
+        return false;
+    }
+
     public void validate(Shipment shipment) throws Exception {
         validateCustomer(shipment);
         validateCargo(shipment);
@@ -32,15 +49,8 @@ public class ShipmentService {
     private void validateCargo(Shipment shipment) throws CargoException {
         if (shipment.getCargo().isEmpty()) { throw new CargoException("Cargo is empty"); }
 
-        double totalWeight = 0;
-        boolean hazardous = false;
-        for (Cargo item : shipment.getCargo()) {
-            totalWeight += item.getWeight();
-            if (item.isHazardous()) hazardous = true;
-        }
-
-        if (totalWeight > shipment.getShip().getCapacity()) throw new CargoException("Cargo over capacity");
-        if (hazardous && !permissionService.canCarryHazardous(shipment.getShip())) throw new CargoException("Shipment cannot handle hazardous cargo");
+        if (getTotalWeight(shipment) > shipment.getShip().getCapacity()) throw new CargoException("Cargo over capacity");
+        if (hasHazardousCargo(shipment) && !permissionService.canCarryHazardous(shipment.getShip())) throw new CargoException("Shipment cannot handle hazardous cargo");
     }
 
     public String validateCalculatePrintSaveAndNotify(Shipment shipment) {
@@ -59,12 +69,7 @@ public class ShipmentService {
             if (item.isHazardous()) hazardous = true;
         }
 
-        double total = pricingService.calculatePrice(
-                totalWeight, totalValue, hazardous,
-                shipment.getOrigin().getName(), shipment.getOrigin().getSector(), shipment.getOrigin().getSecurityLevel(),
-                shipment.getDestination().getName(), shipment.getDestination().getSector(), shipment.getDestination().getSecurityLevel(),
-                shipment.getCustomer().getLoyaltyYears(), shipment.getCustomer().isActive(), shipment.getCustomer().getAccount().isSuspended(),
-                shipment.getDepartureDate());
+        double total = pricingService.calculatePrice(Shipment shipment);
         total += pricingService.calculateInsurance(totalValue, hazardous, shipment.getCustomer());
 
         shipment.setTotal(total);
