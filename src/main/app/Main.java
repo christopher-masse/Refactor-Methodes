@@ -24,7 +24,13 @@ public class Main {
         shipment.addCargo(new Cargo("Volatile fuel cells", 100, 9000, true));
 
         ShipmentService service = new ShipmentService();
-        
-        System.out.println(service.validateCalculatePrintSaveAndNotify(shipment));
+
+        try {
+            service.validate(shipment);
+        } catch (Exception ex) {
+            System.out.println("Invalid shipment: " + ex.getMessage());
+        }
+
+        System.out.println(service.calculatePrintSaveAndNotify(shipment));
     }
 }

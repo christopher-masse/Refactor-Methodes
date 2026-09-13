@@ -47,12 +47,7 @@ public class ShipmentService {
         if (hasHazardousCargo(shipment) && !new PermissionService().canCarryHazardous(shipment.getShip())) throw new CargoException("Shipment cannot handle hazardous cargo");
     }
 
-    public String validateCalculatePrintSaveAndNotify(Shipment shipment) {
-        try {
-            validate(shipment);
-        } catch (Exception ex) {
-            return ex.getMessage();
-        }
+    public String calculatePrintSaveAndNotify(Shipment shipment) {
 
         double total = new PricingService().calculatePrice(shipment);
         total += new PricingService().calculateInsurance(getTotalValue(shipment), hasHazardousCargo(shipment), shipment.getCustomer());
