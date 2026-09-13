@@ -1,13 +1,14 @@
 package main.domain;
 
 import main.enums.Sector;
+import main.enums.SecurityLevel;
 
 public class Planet {
     private String name;
     private Sector sector;
-    private int securityLevel;
+    private SecurityLevel securityLevel;
 
-    public Planet(String name, Sector sector, int securityLevel) {
+    public Planet(String name, Sector sector, SecurityLevel securityLevel) {
         this.name = name;
         this.sector = sector;
         this.securityLevel = securityLevel;
@@ -15,5 +16,5 @@ public class Planet {
 
     public String getName() { return name; }
     public Sector getSector() { return sector; }
-    public int getSecurityLevel() { return securityLevel; }
+    public SecurityLevel getSecurityLevel() { return securityLevel; }
 }

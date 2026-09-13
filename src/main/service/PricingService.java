@@ -36,7 +36,7 @@ public class PricingService {
     }
 
     public double calculateRouteSurcharge(Planet origin, Planet destination) {
-        int temporary = origin.getSecurityLevel() + destination.getSecurityLevel();
+        int temporary = origin.getSecurityLevel().getLevel() + destination.getSecurityLevel().getLevel();
         double surcharge = temporary * 12.5;
         temporary = origin.getSector().equals(destination.getSector()) ? 0 : 1;
         surcharge += temporary * 80;
