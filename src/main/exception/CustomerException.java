@@ -1,6 +1,6 @@
 package main.exception;
 
-public class CustomerException extends RuntimeException {
+public class CustomerException extends Exception {
     public CustomerException(String message) {
         super(message);
     }
