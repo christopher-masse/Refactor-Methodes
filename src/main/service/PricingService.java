@@ -23,8 +23,6 @@ public class PricingService {
     private final int LOYALTY_INSURANCE_DISCOUNT = 10;
     private final int LOYALTY_INSURANCE_DISCOUNT_RATE = 10;
 
-    public double increaseByPercent(double price, double percent) { return price + price * percent; }
-
     public double calculatePrice(Shipment shipment) {
         double price = 0;
 

@@ -1,15 +1,20 @@
 package main.domain;
 
+import main.enums.ShipmentPriority;
 import main.enums.ShipmentStatus;
 import main.exception.CargoException;
 import main.exception.CustomerException;
+import main.service.ManifestRepository;
 import main.service.PermissionService;
+import main.service.PricingService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Shipment {
+    private final int PRIORITY_AMOUNT = 2000;
+
     private final String reference;
     private final Customer customer;
     private final Planet origin;
@@ -71,6 +76,31 @@ public class Shipment {
             throw new CargoException("Cargo over capacity");
         if (hasHazardousCargo() && !new PermissionService().canCarryHazardous(getShip()))
             throw new CargoException("Shipment cannot handle hazardous cargo");
+    }
+
+    public void prepareForLaunch() throws Exception {
+        validate();
+        updateTotal();
+        setStatus(ShipmentStatus.READY);
+        save();
+    }
+
+    private void updateTotal() {
+        total = new PricingService().calculatePrice(this);
+    }
+
+    public String display() {
+        String output =  getPriority() + " | " + getReference() + " | " + String.format("%.2f", total) + " | ";
+        output += "CONFIRMATION " + getReference() + " -> " + getCustomer().getName();
+        return output;
+    }
+
+    private ShipmentPriority getPriority() {
+        return total > PRIORITY_AMOUNT ? ShipmentPriority.PRIORITY : ShipmentPriority.REGULAR;
+    }
+
+    private void save() {
+        new ManifestRepository().save(this);
     }
 
     public void addCargo(Cargo item) { cargo.add(item); }
