@@ -33,7 +33,7 @@ public class PricingService {
         price += getSectorRate(shipment.getOrigin(), shipment.getDestination());
         price += getHolidaysRate(shipment.getDepartureDate());
         price += getLoyaltyDiscountRate(price, shipment.getCustomer());
-        price += getInsuranceRate(price, shipment.hasHazardousCargo(), shipment.getCustomer());
+        price += getInsuranceRate(shipment);
 
         return price;
     }
@@ -67,10 +67,10 @@ public class PricingService {
         return customer.getLoyaltyYears() >= LOYALTY_DISCOUNT ? price * LOYALTY_DISCOUNT_RATE - price : 0;
     }
 
-    public double getInsuranceRate(double price, boolean hazardous, Customer customer) {
-        price = price * BASE_INSURANCE_RATE;
-        if (hazardous) price += INSURANCE_HAZARDOUS_RATE;
-        if (customer.getLoyaltyYears() >= LOYALTY_INSURANCE_DISCOUNT) price -= LOYALTY_INSURANCE_DISCOUNT_RATE;
+    public double getInsuranceRate(Shipment shipment) {
+        double price = shipment.getTotalValue() * BASE_INSURANCE_RATE;
+        if (shipment.hasHazardousCargo()) price += INSURANCE_HAZARDOUS_RATE;
+        if (shipment.getCustomer().getLoyaltyYears() >= LOYALTY_INSURANCE_DISCOUNT) price -= LOYALTY_INSURANCE_DISCOUNT_RATE;
         return Math.max(price, 0);
     }
 
