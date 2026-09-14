@@ -72,20 +72,5 @@ public class PricingService {
         if (customer.getLoyaltyYears() >= 10) value -= 10;
         return Math.max(value, 0);
     }
-
-    public String priceCategory(double price) {
-        return price > 1000 ? "HIGH" : "STANDARD";
-    }
-
-    public double calculateRouteSurcharge(Planet origin, Planet destination) {
-        int temporary = origin.getSecurityLevel().getLevel() + destination.getSecurityLevel().getLevel();
-        double surcharge = temporary * 12.5;
-        temporary = origin.getSector().equals(destination.getSector()) ? 0 : 1;
-        surcharge += temporary * 80;
-        return surcharge;
-    }
-
-    public Object pricingSummary(double total) {
-        return total >= 2000 ? "PRIORITY" : "REGULAR";
-    }
+    
 }
