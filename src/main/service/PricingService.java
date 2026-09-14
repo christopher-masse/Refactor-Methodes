@@ -67,7 +67,7 @@ public class PricingService {
         return customer.getLoyaltyYears() >= LOYALTY_DISCOUNT ? price * LOYALTY_DISCOUNT_RATE - price : 0;
     }
 
-    public double getInsuranceRate(Shipment shipment) {
+    private double getInsuranceRate(Shipment shipment) {
         double price = shipment.getTotalValue() * BASE_INSURANCE_RATE;
         if (shipment.hasHazardousCargo()) price += INSURANCE_HAZARDOUS_RATE;
         if (shipment.getCustomer().getLoyaltyYears() >= LOYALTY_INSURANCE_DISCOUNT) price -= LOYALTY_INSURANCE_DISCOUNT_RATE;
