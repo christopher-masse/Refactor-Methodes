@@ -22,15 +22,48 @@ public class PricingService {
     public double increaseByPercent(double price, double percent) { return price + price * percent; }
 
     public double calculatePrice(Shipment shipment) {
-        double result = shipment.getTotalWeight() * PRICE_PER_POUND;
-        if (shipment.getTotalValue() > HIGH_VALUE_LIMIT) result += shipment.getTotalValue() * HIGH_VALUE_RATE;
-        if (shipment.hasHazardousCargo()) result = increaseByPercent(result, HAZARDOUS_RATE);
-        if (shipment.getOrigin().getSecurityLevel().isHigherThan(SecurityLevel.HIGH)
-                || shipment.getDestination().getSecurityLevel().isHigherThan(SecurityLevel.HIGH)) result += SECURITY_RATE;
-        if (!shipment.getOrigin().getSector().equals(shipment.getDestination().getSector())) result += SECTOR_RATE;
-        if (shipment.getDepartureDate().getMonthValue() == 12 || shipment.getDepartureDate().getMonthValue() <= 2) result += HOLIDAYS_RATE;
-        if (shipment.getCustomer().getLoyaltyYears() >= LOYALTY_DISCOUNT) result *= LOYALTY_DISCOUNT_RATE;
-        return result;
+        double price = 0;
+
+        price += getWeightPrice(shipment.getTotalWeight());
+        price += getHighValueRate(shipment.getTotalValue());
+        price += getHazardousRate(shipment.hasHazardousCargo());
+        price = increaseByPercent(price, getHazardousRate(shipment.hasHazardousCargo()));
+        price += getSecurityRate(shipment.getOrigin(), shipment.getDestination());
+        price += getSectorRate(shipment.getOrigin(), shipment.getDestination());
+        price += getHolidaysRate(shipment.getDepartureDate());
+        price += getLoyaltyDiscount(shipment.getCustomer());
+        price = increaseByPercent(price, getLoyaltyDiscount(shipment.getCustomer()));
+
+        return price;
+    }
+
+    private double getWeightPrice(double weight) {
+        return weight * PRICE_PER_POUND;
+    }
+
+    private double getHighValueRate(double value) {
+        return value > HIGH_VALUE_LIMIT ? value * HIGH_VALUE_RATE : 0;
+    }
+
+    private double getHazardousRate(boolean hasHazardous) {
+        return hasHazardous ? HAZARDOUS_RATE : 1;
+    }
+
+    private double getSecurityRate(Planet origin, Planet destination) {
+        return origin.getSecurityLevel().isHigherThan(SecurityLevel.HIGH)
+                || destination.getSecurityLevel().isHigherThan(SecurityLevel.HIGH) ? SECURITY_RATE : 0;
+    }
+
+    private double getSectorRate(Planet origin, Planet destination) {
+        return !origin.getSector().equals(destination.getSector()) ? SECTOR_RATE : 0;
+    }
+
+    private double getHolidaysRate(LocalDate departureDate) {
+        return departureDate.getMonthValue() == 12 || departureDate.getMonthValue() <= 2 ? HOLIDAYS_RATE : 0;
+    }
+
+    private double getLoyaltyDiscount(Customer customer) {
+        return customer.getLoyaltyYears() >= LOYALTY_DISCOUNT ? LOYALTY_DISCOUNT_RATE : 1;
     }
 
     public double calculateInsurance(double value, boolean hazardous, Customer customer) {
