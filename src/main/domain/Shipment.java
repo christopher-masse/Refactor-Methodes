@@ -1,5 +1,6 @@
 package main.domain;
 
+import main.enums.ShipmentStatus;
 import main.exception.CargoException;
 import main.exception.CustomerException;
 import main.service.PermissionService;
@@ -17,7 +18,7 @@ public class Shipment {
     private final LocalDate departureDate;
     private final List<Cargo> cargo = new ArrayList<>();
     private double total;
-    private String status = "CREATED";
+    private ShipmentStatus status = ShipmentStatus.CREATED;
 
     public Shipment(String reference, Customer customer, Planet origin, Planet destination, Ship ship, LocalDate departureDate) {
         this.reference = reference;
@@ -81,7 +82,6 @@ public class Shipment {
     public LocalDate getDepartureDate() { return departureDate; }
     public List<Cargo> getCargo() { return cargo; }
     public double getTotal() { return total; }
-    public void setTotal(double total) { this.total = total; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public ShipmentStatus getStatus() { return status; }
+    public void setStatus(ShipmentStatus status) { this.status = status; }
 }
