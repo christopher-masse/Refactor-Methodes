@@ -9,6 +9,18 @@ import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
+        Shipment shipment = createTestShipment();
+
+        try {
+            shipment.prepareForLaunch();
+        } catch (Exception ex) {
+            System.out.println("Invalid shipment: " + ex.getMessage());
+        }
+
+        System.out.println(shipment.display());
+    }
+
+    private static Shipment createTestShipment() {
         Customer customer = new Customer(42, "Nova Trading", 8, true, new CustomerAccount(false, 5000));
 
         Planet origin = new Planet("Corellia", Sector.CORE, SecurityLevel.HIGH);
@@ -23,12 +35,6 @@ public class Main {
         shipment.addCargo(new Cargo("Medical supplies", 500, 18000, false));
         shipment.addCargo(new Cargo("Volatile fuel cells", 100, 9000, true));
 
-        try {
-            shipment.prepareForLaunch();
-        } catch (Exception ex) {
-            System.out.println("Invalid shipment: " + ex.getMessage());
-        }
-
-        System.out.println(shipment.display());
+        return shipment;
     }
 }
