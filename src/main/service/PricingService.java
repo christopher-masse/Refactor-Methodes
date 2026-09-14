@@ -18,6 +18,10 @@ public class PricingService {
     private final int LOYALTY_DISCOUNT = 5;
     private final double LOYALTY_DISCOUNT_RATE = 0.9;
     private final double HAZARDOUS_RATE = 0.2;
+    private final double BASE_INSURANCE_RATE = 0.2;
+    private final int INSURANCE_HAZARDOUS_RATE = 75;
+    private final int LOYALTY_INSURANCE_DISCOUNT = 10;
+    private final int LOYALTY_INSURANCE_DISCOUNT_RATE = 10;
 
     public double increaseByPercent(double price, double percent) { return price + price * percent; }
 
@@ -26,13 +30,12 @@ public class PricingService {
 
         price += getWeightPrice(shipment.getTotalWeight());
         price += getHighValueRate(shipment.getTotalValue());
-        price += getHazardousRate(shipment.hasHazardousCargo());
-        price = increaseByPercent(price, getHazardousRate(shipment.hasHazardousCargo()));
+        price += getHazardousRate(price, shipment.hasHazardousCargo());
         price += getSecurityRate(shipment.getOrigin(), shipment.getDestination());
         price += getSectorRate(shipment.getOrigin(), shipment.getDestination());
         price += getHolidaysRate(shipment.getDepartureDate());
-        price += getLoyaltyDiscount(shipment.getCustomer());
-        price = increaseByPercent(price, getLoyaltyDiscount(shipment.getCustomer()));
+        price += getLoyaltyDiscountRate(price, shipment.getCustomer());
+        price += getInsuranceRate(price, shipment.hasHazardousCargo(), shipment.getCustomer());
 
         return price;
     }
@@ -45,8 +48,8 @@ public class PricingService {
         return value > HIGH_VALUE_LIMIT ? value * HIGH_VALUE_RATE : 0;
     }
 
-    private double getHazardousRate(boolean hasHazardous) {
-        return hasHazardous ? HAZARDOUS_RATE : 1;
+    private double getHazardousRate(double price, boolean hasHazardous) {
+        return hasHazardous ? price * HAZARDOUS_RATE : 0;
     }
 
     private double getSecurityRate(Planet origin, Planet destination) {
@@ -62,15 +65,15 @@ public class PricingService {
         return departureDate.getMonthValue() == 12 || departureDate.getMonthValue() <= 2 ? HOLIDAYS_RATE : 0;
     }
 
-    private double getLoyaltyDiscount(Customer customer) {
-        return customer.getLoyaltyYears() >= LOYALTY_DISCOUNT ? LOYALTY_DISCOUNT_RATE : 1;
+    private double getLoyaltyDiscountRate(double price, Customer customer) {
+        return customer.getLoyaltyYears() >= LOYALTY_DISCOUNT ? price * LOYALTY_DISCOUNT_RATE : 0;
     }
 
-    public double calculateInsurance(double value, boolean hazardous, Customer customer) {
-        value = value * 0.02;
-        if (hazardous) value += 75;
-        if (customer.getLoyaltyYears() >= 10) value -= 10;
-        return Math.max(value, 0);
+    public double getInsuranceRate(double price, boolean hazardous, Customer customer) {
+        price = price * BASE_INSURANCE_RATE;
+        if (hazardous) price += INSURANCE_HAZARDOUS_RATE;
+        if (customer.getLoyaltyYears() >= LOYALTY_INSURANCE_DISCOUNT) price -= LOYALTY_INSURANCE_DISCOUNT_RATE;
+        return Math.max(price, 0);
     }
-    
+
 }

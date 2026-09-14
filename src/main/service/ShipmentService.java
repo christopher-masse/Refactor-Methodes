@@ -10,7 +10,6 @@ public class ShipmentService {
     public String calculatePrintSaveAndNotify(Shipment shipment) {
 
         double total = new PricingService().calculatePrice(shipment);
-        total += new PricingService().calculateInsurance(shipment.getTotalValue(), shipment.hasHazardousCargo(), shipment.getCustomer());
 
         shipment.setTotal(total);
         shipment.setStatus("READY");
