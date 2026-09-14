@@ -18,7 +18,7 @@ public class PricingService {
     private final int LOYALTY_DISCOUNT = 5;
     private final double LOYALTY_DISCOUNT_RATE = 0.9;
     private final double HAZARDOUS_RATE = 0.2;
-    private final double BASE_INSURANCE_RATE = 0.2;
+    private final double BASE_INSURANCE_RATE = 0.02;
     private final int INSURANCE_HAZARDOUS_RATE = 75;
     private final int LOYALTY_INSURANCE_DISCOUNT = 10;
     private final int LOYALTY_INSURANCE_DISCOUNT_RATE = 10;
