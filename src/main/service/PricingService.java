@@ -64,7 +64,7 @@ public class PricingService {
     }
 
     private double getLoyaltyDiscountRate(double price, Customer customer) {
-        return customer.getLoyaltyYears() >= LOYALTY_DISCOUNT ? price * LOYALTY_DISCOUNT_RATE : 0;
+        return customer.getLoyaltyYears() >= LOYALTY_DISCOUNT ? price * LOYALTY_DISCOUNT_RATE - price : 0;
     }
 
     public double getInsuranceRate(double price, boolean hazardous, Customer customer) {
