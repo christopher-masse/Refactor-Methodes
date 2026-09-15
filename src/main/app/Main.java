@@ -7,7 +7,8 @@ import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
-        Customer customer = new Customer(42, "Nova Trading", 8, true, false, 5000);
+        CustomerAccount account = new CustomerAccount(false, 5000);
+        Customer customer = new Customer(42, "Nova Trading", 8, true, account);
         Planet origin = new Planet("Corellia", "Core", 3);
         Planet destination = new Planet("Nar Shaddaa", "Hutt Space", 5);
         Ship ship = new Ship("YT-2400-77", "Light Freighter", 2500,

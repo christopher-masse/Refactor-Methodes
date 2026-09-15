@@ -19,7 +19,7 @@ public class ShipmentService {
 
     public String validateCalculatePrintSaveAndNotify(Shipment shipment) {
         if (shipment.getCustomer().isActive()) {
-            if (!shipment.getCustomer().isSuspended()) {
+            if (!shipment.getCustomer().getAccount().isSuspended()) {
                 if (!shipment.getCargo().isEmpty()) {
                     double totalWeight = 0;
                     double totalValue = 0;
@@ -36,7 +36,7 @@ public class ShipmentService {
                             totalWeight, totalValue, hazardous,
                             shipment.getOrigin().getName(), shipment.getOrigin().getSector(), shipment.getOrigin().getSecurityLevel(),
                             shipment.getDestination().getName(), shipment.getDestination().getSector(), shipment.getDestination().getSecurityLevel(),
-                            shipment.getCustomer().getLoyaltyYears(), shipment.getCustomer().isActive(), shipment.getCustomer().isSuspended(),
+                            shipment.getCustomer().getLoyaltyYears(), shipment.getCustomer().isActive(), shipment.getCustomer().getAccount().isSuspended(),
                             shipment.getDepartureDate());
                     total += pricingService.calculateInsurance(totalValue, hazardous, shipment.getCustomer());
 
