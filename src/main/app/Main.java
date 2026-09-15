@@ -4,11 +4,12 @@ import main.domain.*;
 import main.service.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class Main {
     public static void main(String[] args) {
         CustomerAccount account = new CustomerAccount(false, 5000);
-        Customer customer = new Customer(42, "Nova Trading", 8, true, account);
+        Customer customer = new Customer(42, "Nova Trading", LocalDate.of(2018, 1, 1), true, account);
         Planet origin = new Planet("Corellia", "Core", 3);
         Planet destination = new Planet("Nar Shaddaa", "Hutt Space", 5);
         Ship ship = new Ship("YT-2400-77", "Light Freighter", 2500,
