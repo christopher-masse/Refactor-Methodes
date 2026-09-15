@@ -12,8 +12,8 @@ public class Main {
         Customer customer = new Customer(42, "Nova Trading", LocalDate.of(2018, 1, 1), true, account);
         Planet origin = new Planet("Corellia", "Core", 3);
         Planet destination = new Planet("Nar Shaddaa", "Hutt Space", 5);
-        Ship ship = new Ship("YT-2400-77", "Light Freighter", 2500,
-                Permissions.VIEW_MANIFEST | Permissions.EDIT_MANIFEST | Permissions.CARRY_HAZARDOUS);
+        Ship ship = new Ship(new Registration("YT-2400-77", Permissions.VIEW_MANIFEST | Permissions.EDIT_MANIFEST | Permissions.CARRY_HAZARDOUS)
+                , new Model("Light Freighter", 2500));
         Shipment shipment = new Shipment("GF-2026-001", customer, origin, destination, ship,
                 LocalDate.of(2026, 12, 12));
         shipment.addCargo(new Cargo("Medical supplies", 500, 18000, false));
