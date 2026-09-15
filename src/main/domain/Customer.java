@@ -22,7 +22,7 @@ public class Customer {
     public int getId() { return id; }
     public String getName() { return name; }
     public int getLoyaltyYears() {
-        return (int) ChronoUnit.YEARS.between(LocalDate.now(), createdDate);
+        return (int) ChronoUnit.YEARS.between(createdDate, LocalDate.now());
     }
     public boolean isActive() { return active; }
     public CustomerAccount getAccount() { return account; }
