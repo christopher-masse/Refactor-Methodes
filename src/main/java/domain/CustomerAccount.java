@@ -1,4 +1,4 @@
-package main.domain;
+package main.java.domain;
 
 public class CustomerAccount {
     private boolean suspended;

@@ -1,10 +1,9 @@
-package main.service;
+package main.java.service;
 
-import main.domain.Customer;
-import main.domain.Planet;
-import main.domain.Shipment;
-import main.enums.Sector;
-import main.enums.SecurityLevel;
+import main.java.domain.Customer;
+import main.java.domain.Planet;
+import main.java.domain.Shipment;
+import main.java.enums.SecurityLevel;
 
 import java.time.LocalDate;
 

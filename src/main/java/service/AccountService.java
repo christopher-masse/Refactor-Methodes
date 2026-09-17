@@ -1,7 +1,7 @@
-package main.service;
+package main.java.service;
 
-import main.domain.Customer;
-import main.exception.InsufficientFundsException;
+import main.java.domain.Customer;
+import main.java.exception.InsufficientFundsException;
 
 public class AccountService {
     final int REWARD_POINTS_HIGH = 500;

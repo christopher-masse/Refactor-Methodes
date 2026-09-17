@@ -1,4 +1,4 @@
-package main.domain;
+package main.java.domain;
 
 public final class Permissions {
     public static final int VIEW_MANIFEST = 1 << 0;

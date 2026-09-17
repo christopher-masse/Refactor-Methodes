@@ -1,7 +1,7 @@
-package main.domain;
+package main.java.domain;
 
-import main.enums.Sector;
-import main.enums.SecurityLevel;
+import main.java.enums.Sector;
+import main.java.enums.SecurityLevel;
 
 public class Planet {
     private String name;

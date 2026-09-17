@@ -1,9 +1,8 @@
-package main.app;
+package main.java.app;
 
-import main.domain.*;
-import main.enums.Sector;
-import main.enums.SecurityLevel;
-import main.service.*;
+import main.java.domain.*;
+import main.java.enums.Sector;
+import main.java.enums.SecurityLevel;
 
 import java.time.LocalDate;
 

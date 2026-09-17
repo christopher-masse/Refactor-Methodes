@@ -1,4 +1,4 @@
-package main.exception;
+package main.java.exception;
 
 public class CustomerException extends Exception {
     public CustomerException(String message) {

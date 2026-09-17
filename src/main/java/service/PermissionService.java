@@ -1,7 +1,7 @@
-package main.service;
+package main.java.service;
 
-import main.domain.Permissions;
-import main.domain.Ship;
+import main.java.domain.Permissions;
+import main.java.domain.Ship;
 
 public class PermissionService {
     public boolean canCarryHazardous(Ship ship) {
