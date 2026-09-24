@@ -1,9 +1,9 @@
-package main.service;
+package main.java.service;
 
-import main.domain.Cargo;
-import main.domain.Shipment;
-import main.enums.Risk;
-import main.enums.SecurityLevel;
+import main.java.domain.Cargo;
+import main.java.domain.Shipment;
+import main.java.enums.Risk;
+import main.java.enums.SecurityLevel;
 
 public class RiskService {
     public Risk evaluate(Shipment shipment) {

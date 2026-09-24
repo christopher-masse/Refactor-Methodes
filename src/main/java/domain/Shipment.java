@@ -1,12 +1,12 @@
-package main.domain;
+package main.java.domain;
 
-import main.enums.ShipmentPriority;
-import main.enums.ShipmentStatus;
-import main.exception.CargoException;
-import main.exception.CustomerException;
-import main.service.ManifestRepository;
-import main.service.PermissionService;
-import main.service.PricingService;
+import main.java.enums.ShipmentPriority;
+import main.java.enums.ShipmentStatus;
+import main.java.exception.CargoException;
+import main.java.exception.CustomerException;
+import main.java.service.ManifestRepository;
+import main.java.service.PermissionService;
+import main.java.service.PricingService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

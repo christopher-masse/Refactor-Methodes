@@ -1,6 +1,6 @@
-package main.service;
+package main.java.service;
 
-import main.domain.Shipment;
+import main.java.domain.Shipment;
 
 import java.util.ArrayList;
 import java.util.List;

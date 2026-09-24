@@ -1,4 +1,4 @@
-package main.enums;
+package main.java.enums;
 
 public enum ShipmentPriority {
     PRIORITY,
