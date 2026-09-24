@@ -12,11 +12,12 @@ public class Main {
 
         try {
             shipment.prepareForLaunch();
+            System.out.println(shipment.display());
         } catch (Exception ex) {
             System.out.println("Invalid shipment: " + ex.getMessage());
         }
 
-        System.out.println(shipment.display());
+
     }
 
     private static Shipment createTestShipment() {
@@ -26,7 +27,7 @@ public class Main {
         Planet destination = new Planet("Nar Shaddaa", Sector.HUTT_SPACE, SecurityLevel.MAXIMUM);
 
         Ship ship = new Ship("YT-2400-77", "Light Freighter", 2500,
-                Permissions.VIEW_MANIFEST | Permissions.EDIT_MANIFEST | Permissions.CARRY_HAZARDOUS);
+                Permissions.VIEW_MANIFEST | Permissions.EDIT_MANIFEST);
 
         Shipment shipment = new Shipment("GF-2026-001", customer, origin, destination, ship,
                 LocalDate.of(2026, 12, 12));
